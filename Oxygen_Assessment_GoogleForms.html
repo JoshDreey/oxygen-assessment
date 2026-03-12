@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Oxygen Finance — Staff Assessment Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0F1B4C;
+    --midnavy: #1B2E7A;
+    --cyan:    #00B4D8;
+    --cyan2:   #0096B7;
+    --slate:   #2C3E6B;
+    --white:   #FFFFFF;
+    --offwhite:#F7F9FC;
+    --ltgray:  #E8EEF7;
+    --midgray: #8899BB;
+    --dark:    #1A1D2E;
+    --rowall:  #EEF4FF;
+    --green:   #2C6E49;
+    --green-bg:#E8F5E9;
+    --green-acc:#4CAF50;
+    --red:     #F44336;
+    --red-bg:  #FFEBEE;
+    --orange:  #FF9800;
+  }
+
+  body {
+    font-family: 'Lexend', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0F1B4C 0%, #1B2E7A 50%, #0096B7 100%);
+    min-height: 100vh;
+    padding: 28px 16px 48px;
+  }
+
+  /* ── SHARED CARD ─────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.32);
+    max-width: 640px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .card-body { padding: 32px; }
+
+  /* ── LOGO ─────────────────────────────────────────────── */
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .logo-o {
+    width: 32px; height: 32px;
+    background: var(--navy);
+    color: var(--cyan);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 15px;
+  }
+  .logo-text { font-weight: 700; font-size: 15px; color: var(--navy); }
+
+  /* ── SCREEN VISIBILITY ────────────────────────────────── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ══════════════════════════════════════════════════════
+     MENU SCREEN
+  ══════════════════════════════════════════════════════ */
+  #screen-menu .card-body { text-align: center; padding: 40px; }
+
+  .badge {
+    display: inline-block;
+    background: #E0F7FC; color: var(--cyan2);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1.4px; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .menu-title {
+    font-size: 30px; font-weight: 900;
+    color: var(--navy); line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .menu-sub {
+    font-size: 14px; color: #5C6BC0;
+    line-height: 1.65; margin-bottom: 24px;
+  }
+  .menu-sub strong { color: var(--navy); }
+
+  .stats-row {
+    display: flex; gap: 10px;
+    justify-content: center; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .stat-pill {
+    background: var(--offwhite);
+    border: 1px solid var(--ltgray);
+    border-radius: 12px; padding: 8px 18px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 2px;
+  }
+  .stat-val { font-size: 19px; font-weight: 900; color: var(--navy); }
+  .stat-lbl { font-size: 10px; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.9px; }
+
+  .product-badges {
+    display: flex; gap: 10px;
+    justify-content: center; flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .product-tag {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px; border-radius: 10px;
+    border: 1.5px solid; font-size: 13px; font-weight: 600;
+  }
+  .product-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Asset Plus tag */
+  .tag-ap  { background: #E0F7FC; color: var(--navy); border-color: var(--cyan); }
+  .tag-ap .product-dot { background: var(--cyan); }
+  /* PSL tag */
+  .tag-psl { background: var(--green-bg); color: #1B3A1B; border-color: var(--green-acc); }
+  .tag-psl .product-dot { background: var(--green-acc); }
+
+  .btn-start {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy), var(--midnavy));
+    color: #fff; border: none;
+    border-radius: 12px; padding: 15px 32px;
+    font-size: 15px; font-weight: 700;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer; letter-spacing: 0.3px;
+    box-shadow: 0 4px 18px rgba(15,27,76,0.32);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,27,76,0.38); }
+  .btn-start:active { transform: translateY(0); }
+
+  .hint { margin-top: 14px; font-size: 11px; color: var(--midgray); }
+
+  /* ══════════════════════════════════════════════════════
+     QUIZ SCREEN
+  ══════════════════════════════════════════════════════ */
+  #screen-quiz .card-body { padding: 28px 32px; }
+
+  .quiz-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .logo-row-sm .logo-o { width: 24px; height: 24px; font-size: 12px; }
+  .logo-row-sm .logo-text { font-size: 12px; }
+
+  .q-counter { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .q-counter span { color: var(--midgray); font-weight: 400; }
+
+  .progress-bar {
+    height: 5px; background: var(--ltgray);
+    border-radius: 10px; margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 10px;
+    transition: width 0.45s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Product strip */
+  .product-strip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px; border-radius: 10px;
+    margin-bottom: 18px;
+  }
+  .product-strip.ap  { background: var(--navy); }
+  .product-strip.psl { background: #1B3A1B; }
+
+  .product-chip {
+    color: #fff; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 0.4px;
+  }
+  .product-chip.ap  { background: var(--cyan); }
+  .product-chip.psl { background: var(--green-acc); }
+
+  .topic-chip { color: rgba(255,255,255,0.65); font-size: 10px; }
+
+  .question-text {
+    font-size: 17px; font-weight: 700;
+    color: var(--navy); line-height: 1.55;
+    margin-bottom: 20px;
+  }
+
+  /* Options */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; }
+
+  .option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--ltgray);
+    border-radius: 12px;
+    background: var(--offwhite);
+    color: var(--dark);
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    font-family: 'Lexend', sans-serif;
+    width: 100%; text-align: left;
+  }
+  .option:hover:not(:disabled) {
+    border-color: var(--cyan);
+    background: #E0F7FC;
+    transform: translateX(2px);
+  }
+  .option:disabled { cursor: default; transform: none; }
+
+  .option.correct  { background: var(--green-bg); border-color: var(--green-acc); color: #1B3A1B; }
+  .option.wrong    { background: var(--red-bg);   border-color: var(--red);       color: #7f0000; }
+
+  .opt-label {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--ltgray); color: var(--midgray);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .option.correct  .opt-label { background: var(--green-acc); color: #fff; }
+  .option.wrong    .opt-label { background: var(--red);       color: #fff; }
+  .option:not(.correct):not(.wrong):hover .opt-label { background: var(--cyan); color: #fff; }
+
+  .opt-icon { margin-left: auto; font-size: 16px; font-weight: 800; }
+  .opt-icon.tick  { color: var(--green-acc); }
+  .opt-icon.cross { color: var(--red); }
+
+  /* Explanation */
+  .explanation {
+    margin-top: 16px;
+    background: var(--offwhite);
+    border: 1px solid var(--ltgray);
+    border-left: 4px solid var(--cyan);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: none;
+  }
+  .explanation.visible { display: block; }
+  .exp-label {
+    font-size: 10px; font-weight: 700;
+    color: var(--cyan2); text-transform: uppercase;
+    letter-spacing: 0.9px; display: block; margin-bottom: 5px;
+  }
+  .exp-text { font-size: 13px; color: var(--slate); line-height: 1.65; }
+
+  /* Next button */
+  .btn-next {
+    margin-top: 14px; width: 100%;
+    background: linear-gradient(135deg, var(--navy), var(--midnavy));
+    color: #fff; border: none; border-radius: 12px;
+    padding: 13px 32px; font-size: 15px; font-weight: 700;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer; letter-spacing: 0.3px;
+    box-shadow: 0 4px 16px rgba(15,27,76,0.28);
+    display: none;
+    transition: transform 0.1s;
+  }
+  .btn-next.visible { display: block; }
+  .btn-next:hover { transform: translateY(-2px); }
+
+  .score-tracker {
+    margin-top: 12px; text-align: center;
+    font-size: 12px; color: var(--midgray);
+  }
+  .score-tracker strong { color: var(--cyan); }
+
+  /* ══════════════════════════════════════════════════════
+     RESULTS SCREEN
+  ══════════════════════════════════════════════════════ */
+  #screen-results .card-body { text-align: center; padding: 36px 40px 32px; }
+
+  .score-circle-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 14px;
+  }
+  .score-inner {
+    position: absolute; text-align: center;
+  }
+  .score-pct { font-size: 30px; font-weight: 900; line-height: 1; }
+  .score-raw { font-size: 12px; color: var(--midgray); font-weight: 600; margin-top: 2px; }
+
+  .grade-badge {
+    display: inline-block; color: #fff;
+    font-size: 11px; font-weight: 900;
+    padding: 4px 18px; border-radius: 20px;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .results-title { font-size: 24px; font-weight: 900; color: var(--navy); margin-bottom: 20px; }
+
+  .breakdown-row {
+    display: flex; gap: 16px; justify-content: center;
+    margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .breakdown-card {
+    flex: 1; min-width: 180px; max-width: 220px;
+    background: var(--offwhite);
+    border: 1px solid var(--ltgray);
+    border-radius: 12px; padding: 16px;
+    text-align: center;
+  }
+  .breakdown-score { font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .breakdown-name  { font-size: 12px; color: var(--midgray); font-weight: 600; margin-bottom: 10px; }
+  .breakdown-bar   { height: 5px; background: var(--ltgray); border-radius: 10px; overflow: hidden; }
+  .breakdown-fill  { height: 100%; border-radius: 10px; transition: width 0.7s ease; }
+
+  .btn-row { display: flex; gap: 12px; }
+  .btn-review {
+    flex: 1; background: var(--offwhite);
+    color: var(--navy); border: 1.5px solid var(--ltgray);
+    border-radius: 12px; padding: 13px 20px;
+    font-size: 14px; font-weight: 700;
+    font-family: 'Lexend', sans-serif;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .btn-review:hover { background: var(--ltgray); }
+  .btn-retake { flex: 1; }
+
+  /* ══════════════════════════════════════════════════════
+     REVIEW SCREEN
+  ══════════════════════════════════════════════════════ */
+  #screen-review .card-body { padding: 28px 32px; }
+
+  .review-header {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 16px;
+  }
+  .btn-back {
+    background: none; border: none;
+    color: var(--cyan2); font-weight: 700; font-size: 13px;
+    cursor: pointer; font-family: 'Lexend', sans-serif;
+    padding: 0;
+  }
+  .review-progress { font-size: 13px; color: var(--midgray); font-weight: 600; }
+  .nav-btns { display: flex; gap: 6px; }
+  .btn-nav {
+    background: var(--offwhite); border: 1px solid var(--ltgray);
+    border-radius: 8px; width: 32px; height: 32px;
+    font-size: 18px; cursor: pointer; color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Lexend', sans-serif; transition: background 0.1s;
+  }
+  .btn-nav:hover:not(:disabled) { background: var(--ltgray); }
+  .btn-nav:disabled { opacity: 0.35; cursor: default; }
+
+  /* ══════════════════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .card-body { padding: 22px 20px; }
+    #screen-menu .card-body, #screen-results .card-body { padding: 28px 22px; }
+    .menu-title { font-size: 24px; }
+    .question-text { font-size: 15px; }
+    .option { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     MENU
+══════════════════════════════════════════════════════════ -->
+<div id="screen-menu" class="screen active">
+  <div class="card">
+    <div class="card-body">
+      <div class="logo-row" style="justify-content:center">
+        <div class="logo-o">O</div>
+        <span class="logo-text">xygen Finance</span>
+      </div>
+      <div class="badge">Product Knowledge Assessment</div>
+      <h1 class="menu-title">Staff Assessment Test</h1>
+      <p class="menu-sub">
+        20 multiple-choice questions covering the <strong>Asset Plus</strong> and
+        <strong>Public Service Lending</strong> product handbooks.
+      </p>
+      <div class="stats-row">
+        <div class="stat-pill"><span class="stat-val">20</span><span class="stat-lbl">Questions</span></div>
+        <div class="stat-pill"><span class="stat-val">2</span><span class="stat-lbl">Products</span></div>
+        <div class="stat-pill"><span class="stat-val">MCQ</span><span class="stat-lbl">Format</span></div>
+        <div class="stat-pill"><span class="stat-val">Mixed</span><span class="stat-lbl">Order</span></div>
+      </div>
+      <div class="product-badges">
+        <div class="product-tag tag-ap">
+          <span class="product-dot"></span>Asset Plus — 10 Questions
+        </div>
+        <div class="product-tag tag-psl">
+          <span class="product-dot"></span>Public Service Lending — 10 Questions
+        </div>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">Start Assessment →</button>
+      <p class="hint">Questions alternate between both products &nbsp;|&nbsp; Oxygen Finance Internal Use</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ
+══════════════════════════════════════════════════════════ -->
+<div id="screen-quiz" class="screen">
+  <div class="card">
+    <div class="card-body">
+      <div class="quiz-header">
+        <div class="logo-row logo-row-sm" style="margin-bottom:0">
+          <div class="logo-o">O</div>
+          <span class="logo-text">xygen Finance</span>
+        </div>
+        <div class="q-counter" id="q-counter">1 <span>/ 20</span></div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+
+      <div class="product-strip ap" id="product-strip">
+        <span class="product-chip ap" id="product-chip">Asset Plus</span>
+        <span class="topic-chip" id="topic-chip">Topic</span>
+      </div>
+
+      <div class="question-text" id="question-text">Question goes here</div>
+
+      <div class="options-grid" id="options-grid"></div>
+
+      <div class="explanation" id="explanation">
+        <span class="exp-label">💡 Explanation</span>
+        <p class="exp-text" id="exp-text"></p>
+      </div>
+
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question →</button>
+
+      <div class="score-tracker" id="score-tracker">
+        Score: <strong id="live-score">0</strong> / <span id="live-denom">0</span> correct
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     RESULTS
+══════════════════════════════════════════════════════════ -->
+<div id="screen-results" class="screen">
+  <div class="card">
+    <div class="card-body">
+      <div class="logo-row" style="justify-content:center">
+        <div class="logo-o">O</div>
+        <span class="logo-text">xygen Finance</span>
+      </div>
+
+      <div class="score-circle-wrap">
+        <svg id="score-svg" viewBox="0 0 120 120" width="144" height="144">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#E8EEF7" stroke-width="10"/>
+          <circle id="score-arc" cx="60" cy="60" r="52" fill="none" stroke="#00B4D8"
+            stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="0 326.7" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="score-inner">
+          <div class="score-pct" id="result-pct" style="color:#00B4D8">0%</div>
+          <div class="score-raw" id="result-raw">0/20</div>
+        </div>
+      </div>
+
+      <div class="grade-badge" id="grade-badge">–</div>
+      <h2 class="results-title">Assessment Complete</h2>
+
+      <div class="breakdown-row">
+        <div class="breakdown-card" style="border-top: 4px solid #00B4D8;">
+          <div class="breakdown-score" id="ap-score" style="color:#00B4D8">–</div>
+          <div class="breakdown-name">Asset Plus</div>
+          <div class="breakdown-bar"><div class="breakdown-fill" id="ap-bar" style="background:#00B4D8;width:0%"></div></div>
+        </div>
+        <div class="breakdown-card" style="border-top: 4px solid #4CAF50;">
+          <div class="breakdown-score" id="psl-score" style="color:#4CAF50">–</div>
+          <div class="breakdown-name">Public Service Lending</div>
+          <div class="breakdown-bar"><div class="breakdown-fill" id="psl-bar" style="background:#4CAF50;width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-review" onclick="startReview()">Review Answers</button>
+        <button class="btn-start btn-retake" onclick="restartQuiz()">Retake Test</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     REVIEW
+══════════════════════════════════════════════════════════ -->
+<div id="screen-review" class="screen">
+  <div class="card">
+    <div class="card-body">
+      <div class="review-header">
+        <button class="btn-back" onclick="showResults()">← Results</button>
+        <span class="review-progress" id="review-progress">1 / 20</span>
+        <div class="nav-btns">
+          <button class="btn-nav" id="btn-prev" onclick="reviewPrev()">‹</button>
+          <button class="btn-nav" id="btn-rnext" onclick="reviewNext()">›</button>
+        </div>
+      </div>
+
+      <div class="product-strip ap" id="r-product-strip">
+        <span class="product-chip ap" id="r-product-chip">Asset Plus</span>
+        <span class="topic-chip" id="r-topic-chip">Topic</span>
+        <span style="margin-left:auto;color:rgba(255,255,255,0.35);font-size:10px" id="r-qnum">Q1</span>
+      </div>
+
+      <div class="question-text" id="r-question-text"></div>
+      <div class="options-grid" id="r-options-grid"></div>
+
+      <div class="explanation visible" id="r-explanation" style="margin-top:16px">
+        <span class="exp-label">💡 Explanation</span>
+        <p class="exp-text" id="r-exp-text"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     DATA + LOGIC
+══════════════════════════════════════════════════════════ -->
+<script>
+// ── QUESTIONS: alternating pairs (2 AP, 2 PSL, 2 AP, 2 PSL ...) ──────────
+const ALL_QUESTIONS = [
+  // Pair 1 — Asset Plus
+  {
+    id: 1, product: "Asset Plus", slug: "ap",
+    topic: "Product Identification",
+    question: "What is the product category of Asset Plus?",
+    options: ["Personal Loan", "Collateral Loan", "Government Loan", "Micro Finance Loan"],
+    answer: 1,
+    explanation: "Asset Plus is classified as a Collateral Loan product under the Sales Department."
+  },
+  {
+    id: 2, product: "Asset Plus", slug: "ap",
+    topic: "Loan Structure",
+    question: "What is the maximum loan amount available under the Asset Plus product?",
+    options: ["₦50,000,000", "₦10,000,000", "₦100,000,000", "₦2,000,000"],
+    answer: 2,
+    explanation: "Asset Plus offers loans from ₦1,000,000 up to a maximum of ₦100,000,000."
+  },
+  // Pair 1 — Public Service Lending
+  {
+    id: 3, product: "Public Service Lending", slug: "psl",
+    topic: "Product Identification",
+    question: "Which customer segment is the PRIMARY target for the Public Service Lending product?",
+    options: [
+      "Business owners and entrepreneurs",
+      "Eligible Public Servants in Federal, State and Local Govt",
+      "Retirees and pensioners",
+      "Students and fresh graduates"
+    ],
+    answer: 1,
+    explanation: "The primary target is Eligible Public Servants across Federal, State and Local Government levels."
+  },
+  {
+    id: 4, product: "Public Service Lending", slug: "psl",
+    topic: "Loan Structure",
+    question: "What is the maximum loan amount available under Public Service Lending?",
+    options: ["₦500,000", "₦1,000,000", "₦2,000,000", "₦5,000,000"],
+    answer: 2,
+    explanation: "Public Service Lending offers loans from ₦100,000 up to a maximum of ₦2,000,000."
+  },
+  // Pair 2 — Asset Plus
+  {
+    id: 5, product: "Asset Plus", slug: "ap",
+    topic: "Collateral",
+    question: "What is the minimum value required for a car to qualify as collateral under Asset Plus?",
+    options: ["₦3,000,000", "₦5,000,000", "₦6,000,000", "₦10,000,000"],
+    answer: 2,
+    explanation: "A car must have a minimum value of ₦6,000,000 to qualify as collateral for Asset Plus."
+  },
+  {
+    id: 6, product: "Asset Plus", slug: "ap",
+    topic: "Collateral",
+    question: "What Loan-to-Value (LTV) range applies to Gold collateral under Asset Plus?",
+    options: ["40% – 55%", "50% – 70%", "60% – 75%", "70% – 85%"],
+    answer: 2,
+    explanation: "Gold collateral attracts a higher LTV of 60–75% compared to car collateral (40–55%)."
+  },
+  // Pair 2 — Public Service Lending
+  {
+    id: 7, product: "Public Service Lending", slug: "psl",
+    topic: "Loan Structure",
+    question: "What is the loan tenure range for Public Service Lending?",
+    options: ["3 – 6 months", "6 – 12 months", "9 – 18 months", "12 – 24 months"],
+    answer: 2,
+    explanation: "Public Service Lending has a tenure of 9 to 18 months with monthly repayments."
+  },
+  {
+    id: 8, product: "Public Service Lending", slug: "psl",
+    topic: "Interest Rate",
+    question: "What is the flat interest rate for Public Service Lending?",
+    options: ["3%", "4.5%", "5.5%", "8%"],
+    answer: 2,
+    explanation: "Public Service Lending charges a flat interest rate of 5.5%."
+  },
+  // Pair 3 — Asset Plus
+  {
+    id: 9, product: "Asset Plus", slug: "ap",
+    topic: "Pricing & Charges",
+    question: "What is the late payment penalty charged under Asset Plus?",
+    options: ["5% of repayment amount", "10% of repayment amount", "15% of balance", "3% management fee"],
+    answer: 1,
+    explanation: "A late payment penalty of 10% of the repayment amount is charged. The 15% applies only to collateral liquidation."
+  },
+  {
+    id: 10, product: "Asset Plus", slug: "ap",
+    topic: "Pricing & Charges",
+    question: "When does the collateral liquidation fee of 15% apply under Asset Plus?",
+    options: [
+      "Immediately on first missed payment",
+      "After 1 month overdue",
+      "After more than 2 months overdue",
+      "After 6 months overdue"
+    ],
+    answer: 2,
+    explanation: "The 15% liquidation fee on the outstanding balance is triggered when a customer is more than 2 months overdue."
+  },
+  // Pair 3 — Public Service Lending
+  {
+    id: 11, product: "Public Service Lending", slug: "psl",
+    topic: "Eligibility",
+    question: "What is the eligible age range for Public Service Lending customers?",
+    options: [
+      "18 – 60 years",
+      "20 – 60 years",
+      "22 – 55 years with at least 3 years left in active service",
+      "25 – 65 years"
+    ],
+    answer: 2,
+    explanation: "Customers must be 22–55 years old AND have at least 3 years remaining in active government service."
+  },
+  {
+    id: 12, product: "Public Service Lending", slug: "psl",
+    topic: "Process",
+    question: "Which step in the Public Service Lending application process involves setting up automated repayment?",
+    options: [
+      "Confirmation Video",
+      "Bank Statement Request",
+      "Mono Direct Debit",
+      "KYC & Document Collection"
+    ],
+    answer: 2,
+    explanation: "Step 5 — Mono Direct Debit — is where the automated repayment mandate is established."
+  },
+  // Pair 4 — Asset Plus
+  {
+    id: 13, product: "Asset Plus", slug: "ap",
+    topic: "Customer Profile",
+    question: "What is the eligible age range for Asset Plus customers?",
+    options: ["18 – 65 years", "20 – 60 years", "22 – 55 years", "25 – 60 years"],
+    answer: 1,
+    explanation: "Asset Plus targets customers between 20 and 60 years of age."
+  },
+  {
+    id: 14, product: "Asset Plus", slug: "ap",
+    topic: "Risk Management",
+    question: "Which of the following is NOT listed as a default risk mitigation measure for Asset Plus?",
+    options: [
+      "Credit Assessment",
+      "Direct Debit Mandate",
+      "Signed Cheques",
+      "Confirmation Video"
+    ],
+    answer: 3,
+    explanation: "Confirmation Video is a mitigation used in Public Service Lending, not Asset Plus. Asset Plus uses Credit Assessment, Direct Debit Mandate, and Signed Cheques."
+  },
+  // Pair 4 — Public Service Lending
+  {
+    id: 15, product: "Public Service Lending", slug: "psl",
+    topic: "Collateral & Security",
+    question: "What serves as the primary security for Public Service Lending?",
+    options: [
+      "Physical property or land",
+      "Car valued above ₦6,000,000",
+      "Income eligibility / Deduction at source",
+      "Gold worth at least ₦3,000,000"
+    ],
+    answer: 2,
+    explanation: "Public Service Lending uses income eligibility and payroll deduction at source as the primary security mechanism — no physical collateral is required."
+  },
+  {
+    id: 16, product: "Public Service Lending", slug: "psl",
+    topic: "Pricing & Charges",
+    question: "What is the management fee charged under Public Service Lending?",
+    options: ["1%", "2%", "3%", "4%"],
+    answer: 2,
+    explanation: "Public Service Lending charges a management fee of 3%."
+  },
+  // Pair 5 — Asset Plus
+  {
+    id: 17, product: "Asset Plus", slug: "ap",
+    topic: "Exposure Limits",
+    question: "What is the maximum loan exposure per business customer under Asset Plus?",
+    options: ["₦50,000,000", "₦75,000,000", "₦100,000,000", "₦150,000,000"],
+    answer: 2,
+    explanation: "The maximum exposure is ₦50,000,000 per individual and ₦100,000,000 per business under Asset Plus."
+  },
+  {
+    id: 18, product: "Asset Plus", slug: "ap",
+    topic: "Process",
+    question: "What is the approved Turnaround Time (TAT) for Asset Plus loan approval?",
+    options: ["24 hours", "48 hours", "12 hours", "6 hours"],
+    answer: 2,
+    explanation: "The KPI for Asset Plus is a 12-hour approval turnaround time."
+  },
+  // Pair 5 — Public Service Lending
+  {
+    id: 19, product: "Public Service Lending", slug: "psl",
+    topic: "Risk Management",
+    question: "Which unique verification step in Public Service Lending helps mitigate fraud risk?",
+    options: [
+      "Physical collateral inspection",
+      "Confirmation Video",
+      "Guarantor sign-off",
+      "Property valuation report"
+    ],
+    answer: 1,
+    explanation: "A Confirmation Video is a unique fraud mitigation step in Public Service Lending — customers record a video consent that serves as verification."
+  },
+  {
+    id: 20, product: "Public Service Lending", slug: "psl",
+    topic: "Product Limitations",
+    question: "What is the maximum loan exposure per individual customer under Public Service Lending?",
+    options: ["₦500,000", "₦1,000,000", "₦1,500,000", "₦2,000,000"],
+    answer: 2,
+    explanation: "The maximum exposure per individual under Public Service Lending is ₦1,500,000, restricted to approved Government MDAs."
+  }
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let current   = 0;
+let answers   = {};    // { questionId: selectedIndex }
+let liveScore = 0;
+let answeredCount = 0;
+const TOTAL = ALL_QUESTIONS.length;
+
+const CIRCUMFERENCE = 2 * Math.PI * 52; // ≈ 326.7
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function getQ(idx) { return ALL_QUESTIONS[idx]; }
+
+function accentColor(slug) {
+  return slug === 'ap' ? '#00B4D8' : '#4CAF50';
+}
+
+// ── MENU → QUIZ ────────────────────────────────────────────────────────────
+function startQuiz() {
+  current = 0;
+  answers = {};
+  liveScore = 0;
+  answeredCount = 0;
+  renderQuestion();
+  show('screen-quiz');
+}
+
+// ── RENDER QUESTION ────────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = getQ(current);
+  const pct = (current / TOTAL) * 100;
+  const accent = accentColor(q.slug);
+
+  // header
+  document.getElementById('q-counter').innerHTML =
+    `${current + 1} <span>/ ${TOTAL}</span>`;
+
+  // progress
+  const fill = document.getElementById('progress-fill');
+  fill.style.width = pct + '%';
+  fill.style.background = accent;
+
+  // product strip
+  const strip = document.getElementById('product-strip');
+  strip.className = 'product-strip ' + q.slug;
+  document.getElementById('product-chip').textContent = q.product;
+  document.getElementById('product-chip').className = 'product-chip ' + q.slug;
+  document.getElementById('topic-chip').textContent = q.topic;
+
+  // question
+  document.getElementById('question-text').textContent = q.question;
+
+  // options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `
+      <span class="opt-label">${String.fromCharCode(65 + i)}</span>
+      <span>${opt}</span>
+    `;
+    btn.onclick = () => selectOption(i);
+    grid.appendChild(btn);
+  });
+
+  // hide explanation + next
+  document.getElementById('explanation').classList.remove('visible');
+  document.getElementById('btn-next').classList.remove('visible');
+
+  // score tracker
+  updateScoreTracker();
+}
+
+// ── SELECT OPTION ──────────────────────────────────────────────────────────
+function selectOption(selectedIdx) {
+  const q = getQ(current);
+  if (answers[q.id] !== undefined) return; // already answered
+
+  answers[q.id] = selectedIdx;
+  answeredCount++;
+
+  const isCorrect = selectedIdx === q.answer;
+  if (isCorrect) liveScore++;
+
+  // style options
+  const btns = document.getElementById('options-grid').querySelectorAll('.option');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    const label = btn.querySelector('.opt-label');
+    const icon = document.createElement('span');
+    icon.className = 'opt-icon';
+
+    if (i === q.answer) {
+      btn.classList.add('correct');
+      icon.classList.add('tick');
+      icon.textContent = '✓';
+      btn.appendChild(icon);
+    } else if (i === selectedIdx && !isCorrect) {
+      btn.classList.add('wrong');
+      icon.classList.add('cross');
+      icon.textContent = '✗';
+      btn.appendChild(icon);
+    }
+  });
+
+  // show explanation
+  document.getElementById('exp-text').textContent = q.explanation;
+  document.getElementById('explanation').classList.add('visible');
+
+  // show next / finish
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = current + 1 >= TOTAL ? 'See Results →' : 'Next Question →';
+  btnNext.classList.add('visible');
+
+  updateScoreTracker();
+}
+
+function updateScoreTracker() {
+  document.getElementById('live-score').textContent = liveScore;
+  document.getElementById('live-denom').textContent = answeredCount;
+}
+
+// ── NEXT ────────────────────────────────────────────────────────────────────
+function nextQuestion() {
+  if (current + 1 >= TOTAL) {
+    showResults();
+  } else {
+    current++;
+    renderQuestion();
+    window.scrollTo(0, 0);
+  }
+}
+
+// ── RESULTS ─────────────────────────────────────────────────────────────────
+function showResults() {
+  const pct = Math.round((liveScore / TOTAL) * 100);
+
+  // grade
+  let grade, gradeColor;
+  if (pct >= 90)      { grade = 'Excellent'; gradeColor = '#00B4D8'; }
+  else if (pct >= 70) { grade = 'Good';      gradeColor = '#4CAF50'; }
+  else if (pct >= 50) { grade = 'Fair';      gradeColor = '#FF9800'; }
+  else                { grade = 'Needs Review'; gradeColor = '#F44336'; }
+
+  // arc
+  const arc = document.getElementById('score-arc');
+  const filled = CIRCUMFERENCE * pct / 100;
+  arc.setAttribute('stroke-dasharray', `${filled} ${CIRCUMFERENCE - filled}`);
+  arc.setAttribute('stroke', gradeColor);
+
+  document.getElementById('result-pct').textContent  = pct + '%';
+  document.getElementById('result-pct').style.color  = gradeColor;
+  document.getElementById('result-raw').textContent  = `${liveScore}/${TOTAL}`;
+  document.getElementById('grade-badge').textContent  = grade;
+  document.getElementById('grade-badge').style.background = gradeColor;
+
+  // per-product breakdown
+  ['ap', 'psl'].forEach(slug => {
+    const qs = ALL_QUESTIONS.filter(q => q.slug === slug);
+    const correct = qs.filter(q => answers[q.id] === q.answer).length;
+    const total   = qs.length;
+    const pctProd = Math.round((correct / total) * 100);
+    const prefix  = slug === 'ap' ? 'ap' : 'psl';
+    document.getElementById(`${prefix}-score`).textContent = `${correct}/${total}`;
+    setTimeout(() => {
+      document.getElementById(`${prefix}-bar`).style.width = pctProd + '%';
+    }, 200);
+  });
+
+  show('screen-results');
+}
+
+// ── REVIEW ───────────────────────────────────────────────────────────────────
+let reviewIdx = 0;
+
+function startReview() {
+  reviewIdx = 0;
+  renderReview();
+  show('screen-review');
+}
+
+function renderReview() {
+  const q = getQ(reviewIdx);
+  const userAns   = answers[q.id];
+  const isCorrect = userAns === q.answer;
+  const accent    = accentColor(q.slug);
+
+  document.getElementById('review-progress').textContent = `${reviewIdx + 1} / ${TOTAL}`;
+  document.getElementById('btn-prev').disabled  = reviewIdx === 0;
+  document.getElementById('btn-rnext').disabled = reviewIdx === TOTAL - 1;
+
+  // strip
+  const strip = document.getElementById('r-product-strip');
+  strip.className = 'product-strip ' + q.slug;
+  document.getElementById('r-product-chip').textContent = q.product;
+  document.getElementById('r-product-chip').className = 'product-chip ' + q.slug;
+  document.getElementById('r-topic-chip').textContent  = q.topic;
+  document.getElementById('r-qnum').textContent = `Q${q.id}`;
+
+  document.getElementById('r-question-text').textContent = q.question;
+
+  // options
+  const grid = document.getElementById('r-options-grid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.style.cursor = 'default';
+
+    const isRight = i === q.answer;
+    const isUser  = i === userAns;
+
+    if (isRight)              div.classList.add('correct');
+    else if (isUser && !isCorrect) div.classList.add('wrong');
+
+    let iconHTML = '';
+    if (isRight)              iconHTML = '<span class="opt-icon tick">✓</span>';
+    else if (isUser && !isCorrect) iconHTML = '<span class="opt-icon cross">✗</span>';
+
+    div.innerHTML = `
+      <span class="opt-label">${String.fromCharCode(65 + i)}</span>
+      <span>${opt}</span>
+      ${iconHTML}
+    `;
+    grid.appendChild(div);
+  });
+
+  document.getElementById('r-exp-text').textContent = q.explanation;
+}
+
+function reviewPrev() { if (reviewIdx > 0)        { reviewIdx--; renderReview(); } }
+function reviewNext() { if (reviewIdx < TOTAL - 1) { reviewIdx++; renderReview(); } }
+
+// ── RESTART ──────────────────────────────────────────────────────────────────
+function restartQuiz() {
+  show('screen-menu');
+}
+</script>
+</body>
+</html>
